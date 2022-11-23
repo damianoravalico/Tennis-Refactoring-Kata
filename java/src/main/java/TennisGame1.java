@@ -19,24 +19,32 @@ public class TennisGame1 implements TennisGame {
 
     public String buildCurrentGameResult() {
         if (player1Score == player2Score) {
-            return switch (player1Score) {
-                case 0 -> "Love-All";
-                case 1 -> "Fifteen-All";
-                case 2 -> "Thirty-All";
-                default -> "Deuce";
-            };
+            return generateNamedScoreGivenTie();
         }
         if (player1Score >= 4 || player2Score >= 4) {
-            int scoreDifference = player1Score - player2Score;
-            if (Math.abs(scoreDifference) == 1) {
-                return "Advantage " + (scoreDifference == 1 ? "player1" : "player2");
-            }
-            return scoreDifference >= 2 ? "Win for player1" : "Win for player2";
+            return generateNamedScoreGivenAdvantage();
         }
-        return evaluatePlayerScore(player1Score) + "-" + evaluatePlayerScore(player2Score);
+        return castIntegerScoreToTennisScore(player1Score) + "-" + castIntegerScoreToTennisScore(player2Score);
     }
 
-    private static String evaluatePlayerScore(int score) {
+    private String generateNamedScoreGivenTie() {
+        return switch (player1Score) {
+            case 0 -> "Love-All";
+            case 1 -> "Fifteen-All";
+            case 2 -> "Thirty-All";
+            default -> "Deuce";
+        };
+    }
+
+    private String generateNamedScoreGivenAdvantage() {
+        int scoreDifference = player1Score - player2Score;
+        if (Math.abs(scoreDifference) == 1) {
+            return "Advantage " + (scoreDifference == 1 ? "player1" : "player2");
+        }
+        return scoreDifference >= 2 ? "Win for player1" : "Win for player2";
+    }
+
+    private static String castIntegerScoreToTennisScore(int score) {
         return switch (score) {
             case 0 -> "Love";
             case 1 -> "Fifteen";
